@@ -13,6 +13,8 @@ import { AnimalProvider } from "./animal/AnimalProvider"
 import AnimalList from "./animal/AnimalList"
 import { CustomerProvider } from "./customer/CustomerProvider"
 import CustomerList from "./customer/CustomerList"
+import { EmployeeProvider } from "./employee/EmployeeProvider"
+import EmployeeList from "./employee/EmployeeList"
 export default () => (
     <>
         <h2>Nashville Kennels</h2>
@@ -28,11 +30,9 @@ export default () => (
                 <AnimalList/>
             </AnimalProvider>
         <h2>Employees</h2>
-        <article className="employees">
-            <Employee />
-            <Employee />
-            <Employee />
-        </article>
+            <EmployeeProvider>
+                <EmployeeList/>
+            </EmployeeProvider>
         <h2>Locations</h2>
             <LocationProvider>
                 <LocationList />
