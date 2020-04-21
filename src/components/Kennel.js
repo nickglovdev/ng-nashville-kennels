@@ -7,6 +7,9 @@ import Location from "./location/Location"
 import "./location/Location.css"
 import Customer from "./customer/Customer"
 import "./customer/Customer.css"
+import { LocationProvider } from "./location/LocationProvider"
+import LocationList from "./location/LocationList"
+
 export default () => (
     <>
         <h2>Nashville Kennels</h2>
@@ -23,15 +26,19 @@ export default () => (
             <Animal />
             <Animal />
         </article>
+        <h2>Employees</h2>
         <article className="employees">
             <Employee />
             <Employee />
             <Employee />
         </article>
+        <h2>Locations</h2>
         <article className="locations">
-            <Location/>
-            <Location/>
+            <LocationProvider>
+                <LocationList />>
+            </LocationProvider>
         </article>
+        <h2>Customer</h2>
         <article className="customers">
             <Customer/>
             <Customer/>
