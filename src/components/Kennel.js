@@ -29,10 +29,13 @@ export default () => (
             <AnimalProvider>
                 <AnimalList/>
             </AnimalProvider>
-        <h2>Employees</h2>
-            <EmployeeProvider>
-                <EmployeeList/>
-            </EmployeeProvider>
+
+        <EmployeeProvider>
+            <LocationProvider>
+                <EmployeeList />
+            </LocationProvider>
+        </EmployeeProvider>
+
         <h2>Locations</h2>
             <LocationProvider>
                 <LocationList />
