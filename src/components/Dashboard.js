@@ -1,43 +1,84 @@
-import React from "react"
-import Animal from "./animal/Animal"
-import Employee from "./employee/Employee"
-import Customer from "./customer/Customer"
-import Location from "./location/Location"
-import "./Kennel.css"
-import "./animal/Animal.css"
-import "./employee/Employee.css"
-import "./customer/Customer.css"
-import "./location/Location.css"
-import LocationList from "./location/LocationList"
+import React, { useState, useEffect } from "react"
 import { LocationProvider } from "./location/LocationProvider"
-import AnimalList from "./animal/AnimalList"
-import { AnimalProvider } from "./animal/AnimalProvider"
-import { CustomerProvider } from "./customer/CustomerProvider"
+import LocationList from "./location/LocationList"
 import { EmployeeProvider } from "./employee/EmployeeProvider"
 import EmployeeList from "./employee/EmployeeList"
+import { AnimalProvider } from "./animal/AnimalProvider"
+import { CustomerProvider } from "./customer/CustomerProvider"
 import CustomerList from "./customer/CustomerList"
+import { SearchBar } from "./search/SearchBar"
+import { SearchResults } from "./search/SearchResults"
+import "./Layout.css"
+import "./Kennel.css"
 
-export default () => (
-    <>
-        <h2>Nashville Kennels</h2>
-        <small>Loving care when you're not there.</small>
+export default () => {
+    const [searchTerms, setTerms] = useState(null)
+    const [activeList, setActiveList] = useState("locations")
+    const [components, setComponents] = useState()
 
-        <address>
-            <div>Visit Us at the Nashville North Location</div>
-            <div>500 Puppy Way</div>
-        </address>
+    // HIGHER ORDER FUNCTION. IT RETURNS OTHER FUNCTION (i.e. COMPONENTS)
+    const showLocations = () => (
+        <LocationProvider>
+            <LocationList />
+        </LocationProvider>
+    )
 
-        <AnimalProvider>
-            <CustomerProvider>
-                <EmployeeProvider>
-                    <LocationProvider>
-                        <AnimalList />
-                        <LocationList />
-                        <CustomerList />
-                        <EmployeeList />
-                    </LocationProvider>
-                </EmployeeProvider>
-            </CustomerProvider>
-        </AnimalProvider>
-    </>
-)
+    const showCustomers = () => (
+        <CustomerProvider>
+            <CustomerList />
+        </CustomerProvider>
+    )
+
+    const showEmployees = () => (
+        <EmployeeProvider>
+            <LocationProvider>
+                <EmployeeList />
+            </LocationProvider>
+        </EmployeeProvider>
+    )
+
+    /*
+        This effect hook determines which list is shown
+        based on the state of the `activeList` variable.
+    */
+    useEffect(() => {
+        if (activeList === "customers") {
+            setComponents(showCustomers)
+        }
+        else if (activeList === "locations") {
+            setComponents(showLocations)
+        }
+        else if (activeList === "employees") {
+            setComponents(showEmployees)
+        }
+    }, [activeList])
+
+    return (
+        <div className="mainContainer">
+            <div className="searchContainer">
+                <AnimalProvider>
+                    <CustomerProvider>
+                        <LocationProvider>
+                            <SearchBar setTerms={setTerms} />
+                            <SearchResults searchTerms={searchTerms} />
+                        </LocationProvider>
+                    </CustomerProvider>
+                </AnimalProvider>
+            </div>
+            <div className="dataContainer">
+                <h1>Nashville Kennels</h1>
+                <small>Loving care when you're not there.</small>
+                <div className="listContainer">
+                    <div className="links">
+                        <div className="fakeLink href" onClick={() => setActiveList("locations")}>Locations</div>
+                        <div className="fakeLink href" onClick={() => setActiveList("customers")}>Customers</div>
+                        <div className="fakeLink href" onClick={() => setActiveList("employees")}>Employees</div>
+                    </div>
+                    <div className="listDisplay">
+                        {components}
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
